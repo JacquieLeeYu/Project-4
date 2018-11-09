@@ -16,4 +16,47 @@ final class ChatMessage implements Serializable {
 
     // Here is where you should implement the chat message object.
     // Variables, Constructors, Methods, etc.
+
+
+    private int messageType;
+    private String message;
+
+    //messageType {(0 = normal), (1 = logout)}
+    public ChatMessage(int messageType, String message) {
+        this.message = message;
+        this.messageType = messageType;
+
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public int getMessageType() {
+        return messageType;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    private void broadcast(String message) {
+
+    }
+
+    private boolean writeMessage(String msg) {
+        return true;
+    }
+
+    private void remove(int id) {
+
+    }
+
+    private void run() {
+
+    }
+
+    private void close() {
+
+    }
 }
