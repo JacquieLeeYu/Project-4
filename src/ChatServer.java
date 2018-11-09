@@ -73,13 +73,14 @@ final class ChatServer {
         private ClientThread(Socket socket, int id) {
             this.id = id;
             this.socket = socket;
-            ChatMessage cm = new ChatMessage();
+            int writeMess = 0;
             try {
                 sOutput = new ObjectOutputStream(socket.getOutputStream());
                 sInput = new ObjectInputStream(socket.getInputStream());
                 username = (String) sInput.readObject();
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
+                writeMess = -1;
             }
         }
 

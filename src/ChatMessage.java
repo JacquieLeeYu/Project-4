@@ -44,6 +44,11 @@ final class ChatMessage implements Serializable {
 
     }
 
+    private boolean writeMessage(String msg) {
+        ChatServer s = new ChatServer();
+
+        return true;
+    }
 
     private void remove(int id) {
 
