@@ -95,7 +95,7 @@ final class ChatClient {
         client.start();
 
         // Send an empty message to the server
-        client.sendMessage(new ChatMessage());
+        client.sendMessage(new ChatMessage(0,""));
     }
 
 
