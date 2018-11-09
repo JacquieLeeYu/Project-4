@@ -1,3 +1,14 @@
+/**
+ * CS18000 Project 4 - Simple Server
+ *
+ *
+ *
+ * @author Jacquie Yu, Siddarth Pillai
+ *
+ *
+ */
+
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
