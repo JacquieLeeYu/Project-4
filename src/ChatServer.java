@@ -68,13 +68,12 @@ final class ChatServer {
         String username;
         ChatMessage cm;
 
-        public boolean writeMessage(String msg) {
 
-        }
 
         private ClientThread(Socket socket, int id) {
             this.id = id;
             this.socket = socket;
+            ChatMessage cm = new ChatMessage();
             try {
                 sOutput = new ObjectOutputStream(socket.getOutputStream());
                 sInput = new ObjectInputStream(socket.getInputStream());
