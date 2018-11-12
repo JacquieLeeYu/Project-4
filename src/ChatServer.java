@@ -8,6 +8,7 @@
  *
  */
 
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -24,6 +25,13 @@ final class ChatServer {
 
     private ChatServer(int port) {
         this.port = port;
+    }
+    private ChatServer() {
+        this(1500);
+    }
+    private ChatServer(int port, File badWords){
+        this.port = port;
+
     }
 
     /*

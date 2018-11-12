@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Scanner;
 
 final class ChatClient {
     private ObjectInputStream sInput;
@@ -27,6 +28,12 @@ final class ChatClient {
         this.server = server;
         this.port = port;
         this.username = username;
+    }
+    private ChatClient(int port, String username) {
+        this("localhost",port,username);
+    }
+    private ChatClient(String username) {
+        this(1500,username);
     }
 
     /*
@@ -89,6 +96,14 @@ final class ChatClient {
      */
     public static void main(String[] args) {
         // Get proper arguments and override defaults
+        args = new String[3];
+        String username = "";
+        String portNumber = "";
+        String serverAddress = "";
+        args[0] = username;
+        args[1] = portNumber;
+        args[2] = serverAddress;
+        Scanner scanner = new Scanner(System.in);
 
         // Create your client and start it
         ChatClient client = new ChatClient("localhost", 1500, "CS 180 Student");
@@ -96,6 +111,8 @@ final class ChatClient {
 
         // Send an empty message to the server
         client.sendMessage(new ChatMessage(0,""));
+
+        client.sendMessage(new ChatMessage(0,scanner.nextLine()));
     }
 
 
