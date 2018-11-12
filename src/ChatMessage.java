@@ -30,7 +30,7 @@ final class ChatMessage implements Serializable {
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
-    }
+    } //not sure if needed
 
     public int getMessageType() {
         return messageType;

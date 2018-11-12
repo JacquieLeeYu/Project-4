@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 final class ChatClient {
@@ -104,6 +105,43 @@ final class ChatClient {
         args[1] = portNumber;
         args[2] = serverAddress;
         Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            String command = scanner.nextLine(); //command taken from terminal
+            ArrayList<String> spaceIndex = new ArrayList<>(); //Array of indexes with spaces
+
+            for (int i = 0 ; i < command.length() ; i++) { //check for number of spaces
+                if (command.charAt(i) == ' ') {
+                    spaceIndex.add(String.valueOf(i));
+                }
+            }
+
+
+            //THIS DOES NOT HANDLE IF THE USER INPUTS SOMETHING OTHER THAN FOR JAVA CHATCLIENT
+
+            if (spaceIndex.size() == 4) { //if contains all parameters
+                username = command.substring(Integer.parseInt(spaceIndex.get(1) + 1),
+                        Integer.parseInt(spaceIndex.get(2)));
+                portNumber = command.substring(Integer.parseInt(spaceIndex.get(2) + 1),
+                        Integer.parseInt(spaceIndex.get(3)));
+                serverAddress = command.substring(Integer.parseInt(spaceIndex.get(3) + 1),
+                        Integer.parseInt(spaceIndex.get(4)));
+                break;
+            } else if (spaceIndex.size() == 3) { //if no serverAddress
+                username = command.substring(Integer.parseInt(spaceIndex.get(1) + 1),
+                        Integer.parseInt(spaceIndex.get(2)));
+                portNumber = command.substring(Integer.parseInt(spaceIndex.get(2) + 1),
+                        Integer.parseInt(spaceIndex.get(3)));
+                serverAddress = "localhost";
+                break;
+            } else { //if only contains username
+                username = command.substring(Integer.parseInt(spaceIndex.get(1) + 1),
+                        Integer.parseInt(spaceIndex.get(2)));
+                portNumber = "1500";
+                serverAddress = "localhost";
+                break;
+            }
+        }
 
         // Create your client and start it
         ChatClient client = new ChatClient("localhost", 1500, "CS 180 Student");
