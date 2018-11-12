@@ -59,7 +59,12 @@ final class ChatMessage implements Serializable {
     }
 
     private void run() {
+        if (getMessageType() == 1) {
+            //logout
 
+        } else {
+
+        }
     }
 
     private void close() {
