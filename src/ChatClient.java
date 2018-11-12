@@ -36,6 +36,9 @@ final class ChatClient {
     private ChatClient(String username) {
         this(username,1500);
     }
+    private ChatClient() {
+        this("Anonymous");
+    }
 
     /*
      * This starts the Chat Client
@@ -131,8 +134,13 @@ final class ChatClient {
                 portNumber = command.substring(Integer.parseInt(spaceIndex.get(2)) + 1);
                 serverAddress = "localhost";
                 break;
-            } else { //if only contains username
+            } else if (spaceIndex.size() == 2){ //if only contains username
                 username = command.substring(Integer.parseInt(spaceIndex.get(1)) + 1);
+                portNumber = "1500";
+                serverAddress = "localhost";
+                break;
+            } else { // if it contains nothing.
+                username = "Anonymous";
                 portNumber = "1500";
                 serverAddress = "localhost";
                 break;
