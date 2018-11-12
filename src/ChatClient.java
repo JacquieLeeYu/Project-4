@@ -149,7 +149,7 @@ final class ChatClient {
         // Send an empty message to the server
         client.sendMessage(new ChatMessage(0,""));
         String message = scanner.nextLine();
-        while (!message.equalsIgnoreCase("/logout")) {
+        while (!message.equalsIgnoreCase(" ") && !message.equalsIgnoreCase("/logout")) {
             client.sendMessage(new ChatMessage(0,message));
             message = scanner.nextLine();
         }

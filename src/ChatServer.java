@@ -14,6 +14,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -125,11 +126,13 @@ final class ChatServer {
         @Override
         public void run() {
             // Read the username sent to you by client
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
             System.out.println(username + " has connected." );
             while(true) {
                 try {
                     cm = (ChatMessage) sInput.readObject();
-                    System.out.println(username + ":" + cm.getMessage());
+                    System.out.println(dtf.format(java.time.LocalTime.now()) + " " + username + ": " + cm.getMessage());
+                    sOutput.writeObject(dtf.format(java.time.LocalTime.now()) + " " + username + ": " + cm.getMessage() + "\n");
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
