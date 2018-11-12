@@ -10,6 +10,7 @@
 
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 
 final class ChatMessage implements Serializable {
     private static final long serialVersionUID = 6898543889087L;
@@ -40,12 +41,15 @@ final class ChatMessage implements Serializable {
         return message;
     }
 
-    private void broadcast(String message) {
+    private synchronized void broadcast(String message) {
+
+
 
     }
 
     private boolean writeMessage(String msg) {
-       // ChatServer s = new ChatServer();
+        message = msg;
+
 
         return true;
     }

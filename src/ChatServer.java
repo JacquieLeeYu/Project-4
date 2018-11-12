@@ -41,8 +41,8 @@ final class ChatServer {
      */
     private void start() {
         try {
+            ServerSocket serverSocket = new ServerSocket(port);
             while(true) {
-                ServerSocket serverSocket = new ServerSocket(port);
                 Socket socket = serverSocket.accept();
                 Runnable r = new ClientThread(socket, uniqueId++);
                 Thread t = new Thread(r);
@@ -125,19 +125,20 @@ final class ChatServer {
         @Override
         public void run() {
             // Read the username sent to you by client
-            try {
-                cm = (ChatMessage) sInput.readObject();
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-            System.out.println(username + ": Ping");
-
-
+            System.out.println(username + " has connected." );
+            while(true) {
+                try {
+                    cm = (ChatMessage) sInput.readObject();
+                    System.out.println(username + ":" + cm.getMessage());
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             // Send message back to the client
-            try {
-                sOutput.writeObject("Pong");
-            } catch (IOException e) {
-                e.printStackTrace();
+               /* try {
+                    sOutput.writeObject("Pong");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }*/
             }
         }
     }
