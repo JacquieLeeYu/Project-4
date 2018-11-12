@@ -98,12 +98,9 @@ final class ChatClient {
     public static void main(String[] args) {
         // Get proper arguments and override defaults
         args = new String[3];
-        String username = "";
-        String portNumber = "";
-        String serverAddress = "";
-        args[0] = username;
-        args[1] = portNumber;
-        args[2] = serverAddress;
+        String username;
+        String portNumber;
+        String serverAddress;
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
@@ -142,9 +139,12 @@ final class ChatClient {
                 break;
             }
         }
+        args[0] = username;
+        args[1] = portNumber;
+        args[2] = serverAddress;
 
         // Create your client and start it
-        ChatClient client = new ChatClient("localhost", 1500, "CS 180 Student");
+        ChatClient client = new ChatClient(args[0], Integer.parseInt(args[1]), args[2]);
         client.start();
 
         // Send an empty message to the server
