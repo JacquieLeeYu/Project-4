@@ -38,7 +38,8 @@ public class ChatFilter {
                 }
 
                 for (int i = 0; i < badWords.length ; i++) {
-                    msg = msg.replace(badWords[i],filteredWords[i]);
+                    msg = msg.replaceAll( "(?!)"+badWords[i],filteredWords[i]);
+
                 }
                 System.out.println(msg);
 
@@ -58,6 +59,6 @@ public class ChatFilter {
     }
     public static void main(String[] args) {
         ChatFilter chat =  new ChatFilter("/Users/siddharthpillai/Desktop/filterText.txt");
-        chat.filter("I go to IU. It is a bad school");
+        chat.filter("I go to IU. It is a baD school");
     }
 }

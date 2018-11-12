@@ -97,6 +97,8 @@ final class ChatClient {
      */
     public static void main(String[] args) {
         // Get proper arguments and override defaults
+
+
         args = new String[3];
         String username;
         String portNumber;
@@ -117,23 +119,20 @@ final class ChatClient {
             //THIS DOES NOT HANDLE IF THE USER INPUTS SOMETHING OTHER THAN FOR JAVA CHATCLIENT
 
             if (spaceIndex.size() == 4) { //if contains all parameters
-                username = command.substring(Integer.parseInt(spaceIndex.get(1) + 1),
+                username = command.substring(Integer.parseInt(spaceIndex.get(1)) + 1,
                         Integer.parseInt(spaceIndex.get(2)));
-                portNumber = command.substring(Integer.parseInt(spaceIndex.get(2) + 1),
+                portNumber = command.substring(Integer.parseInt(spaceIndex.get(2)) + 1,
                         Integer.parseInt(spaceIndex.get(3)));
-                serverAddress = command.substring(Integer.parseInt(spaceIndex.get(3) + 1),
-                        Integer.parseInt(spaceIndex.get(4)));
+                serverAddress = command.substring(Integer.parseInt(spaceIndex.get(3)) + 1);
                 break;
             } else if (spaceIndex.size() == 3) { //if no serverAddress
-                username = command.substring(Integer.parseInt(spaceIndex.get(1) + 1),
+                username = command.substring(Integer.parseInt(spaceIndex.get(1)) + 1,
                         Integer.parseInt(spaceIndex.get(2)));
-                portNumber = command.substring(Integer.parseInt(spaceIndex.get(2) + 1),
-                        Integer.parseInt(spaceIndex.get(3)));
+                portNumber = command.substring(Integer.parseInt(spaceIndex.get(2)) + 1);
                 serverAddress = "localhost";
                 break;
             } else { //if only contains username
-                username = command.substring(Integer.parseInt(spaceIndex.get(1) + 1),
-                        Integer.parseInt(spaceIndex.get(2)));
+                username = command.substring(Integer.parseInt(spaceIndex.get(1)) + 1);
                 portNumber = "1500";
                 serverAddress = "localhost";
                 break;

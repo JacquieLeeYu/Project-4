@@ -45,7 +45,7 @@ final class ChatMessage implements Serializable {
     }
 
     private boolean writeMessage(String msg) {
-        ChatServer s = new ChatServer();
+       // ChatServer s = new ChatServer();
 
         return true;
     }
