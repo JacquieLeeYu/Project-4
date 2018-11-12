@@ -25,16 +25,16 @@ final class ChatClient {
     private final String username;
     private final int port;
 
-    private ChatClient(String server, int port, String username) {
+    private ChatClient(String username, int port, String server) {
         this.server = server;
         this.port = port;
         this.username = username;
     }
-    private ChatClient(int port, String username) {
-        this("localhost",port,username);
+    private ChatClient(String username, int port) {
+        this(username,port,"localhost");
     }
     private ChatClient(String username) {
-        this(1500,username);
+        this(username,1500);
     }
 
     /*

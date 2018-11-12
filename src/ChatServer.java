@@ -75,7 +75,7 @@ final class ChatServer {
             }
 
             if (spaceIndex.size() == 2) {
-                portNumber = command.substring(Integer.parseInt(spaceIndex.get(1) + 1));
+                portNumber = command.substring(Integer.parseInt(spaceIndex.get(1)) + 1);
                 break;
             } else {
                 portNumber = "1500";
