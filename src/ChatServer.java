@@ -126,13 +126,12 @@ final class ChatServer {
         @Override
         public void run() {
             // Read the username sent to you by client
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
+
             System.out.println(username + " has connected." );
             while(true) {
                 try {
                     cm = (ChatMessage) sInput.readObject();
-                    System.out.println(dtf.format(java.time.LocalTime.now()) + " " + username + ": " + cm.getMessage());
-                    sOutput.writeObject(dtf.format(java.time.LocalTime.now()) + " " + username + ": " + cm.getMessage() + "\n");
+                    broadcast(" " + username + ": " + cm.getMessage() + "\n");
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -145,10 +144,17 @@ final class ChatServer {
             }
         }
 
+
         private synchronized void broadcast(String message) {
-
-
-
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
+            String messageComplete = dtf.format(java.time.LocalTime.now()) + message;
+            System.out.println(messageComplete);
+            for (ClientThread ct : clients) { //using writeMessage to output to all clients
+                if (!writeMessage(messageComplete)) {
+                    System.out.println("Server could not send message | " + ct.username +
+                            "\nMessage: " + ct.cm.getMessage());
+                }
+            }
         }
 
         private boolean writeMessage(String msg) {
