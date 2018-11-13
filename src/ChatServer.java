@@ -164,14 +164,17 @@ final class ChatServer {
         }
 
         private synchronized void remove(int id) {
-            clients.remove(id);
-
-
-
+            clients.remove(id); //not sure if need to add more into here
         }
 
         private void close() {
-
+            try {
+                sInput.close();
+                sOutput.close();
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
