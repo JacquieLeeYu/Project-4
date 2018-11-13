@@ -175,7 +175,7 @@ final class ChatServer {
         }
 
         private synchronized void remove(int id) {
-            clients.remove(id - 1); //not sure if need to add more into here
+            clients.set(id - 1, null); //not sure if need to add more into here
         }
 
         private void close() {
