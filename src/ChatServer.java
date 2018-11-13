@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Scanner;
 
 final class ChatServer {
-    private static int uniqueId = 0;
+    private static int uniqueId = -1;
     private final List<ClientThread> clients = new ArrayList<>();
     private final int port;
 
@@ -154,7 +154,7 @@ final class ChatServer {
         private synchronized void broadcast(String message) {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
             String messageComplete = dtf.format(java.time.LocalTime.now()) + message;
-            System.out.println(messageComplete);
+            System.out.println(messageComplete + "234 test");
             for (ClientThread ct : clients) { //using writeMessage to output to all clients
                 if (ct.writeMessage(message)) {
 
@@ -175,7 +175,8 @@ final class ChatServer {
         }
 
         private synchronized void remove(int id) {
-            clients.set(id - 1, null); //not sure if need to add more into here
+            System.out.println(id);
+            clients.set(id, null); //not sure if need to add more into here
         }
 
         private void close() {
