@@ -150,8 +150,8 @@ final class ChatServer {
             String messageComplete = dtf.format(java.time.LocalTime.now()) + message;
             System.out.println(messageComplete);
             for (ClientThread ct : clients) { //using writeMessage to output to all clients
-                if (!writeMessage(messageComplete)) {
-                    System.out.println("Server could not send message | " + ct.username +
+                if (!ct.writeMessage(messageComplete)) {
+                    System.out.println("Server is not connected to client | " + ct.username +
                             "\nMessage: " + ct.cm.getMessage());
                 }
             }
@@ -163,7 +163,10 @@ final class ChatServer {
             return true;
         }
 
-        private void remove(int id) {
+        private synchronized void remove(int id) {
+            clients.remove(id);
+
+
 
         }
 
