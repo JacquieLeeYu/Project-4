@@ -85,7 +85,7 @@ final class ChatClient {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            try {sInput.close();
+            try { sInput.close();
             sOutput.close();
             socket.close();
 

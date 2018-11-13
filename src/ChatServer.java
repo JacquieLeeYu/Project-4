@@ -155,10 +155,10 @@ final class ChatServer {
             String messageComplete = dtf.format(java.time.LocalTime.now()) + message;
             System.out.println(messageComplete);
             for (ClientThread ct : clients) { //using writeMessage to output to all clients
-                if (!ct.writeMessage(message)) {
-                    System.out.println("Server is not connected to client | " + ct.username +
-                            "\nMessage: " + ct.cm.getMessage());
-                }
+                if (ct.writeMessage(message)) {
+
+                } else System.out.println("Server is not connected to client | " + ct.username +
+                        "\nMessage: " + ct.cm.getMessage());
             }
         }
 
@@ -166,11 +166,10 @@ final class ChatServer {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
             String messageComplete = dtf.format(java.time.LocalTime.now()) + msg;
             try {
-                sOutput.writeObject(new ChatMessage(0,messageComplete));
+                sOutput.writeObject(messageComplete);
             } catch (IOException e) {
                 System.out.println("Server is not connected to client");
             }
-            
             return this.socket.isConnected();
         }
 
