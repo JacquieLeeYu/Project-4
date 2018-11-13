@@ -135,7 +135,7 @@ final class ChatServer {
                         System.out.println(username + " disconnected with a LOGOUT message\n");
                         remove(uniqueId);
                         close();
-                        break;
+                        return;
                     }
                     broadcast(" " + username + ": " + cm.getMessage() + "\n");
                 } catch (IOException | ClassNotFoundException e) {
@@ -175,7 +175,7 @@ final class ChatServer {
         }
 
         private synchronized void remove(int id) {
-            clients.remove(id); //not sure if need to add more into here
+            clients.remove(id - 1); //not sure if need to add more into here
         }
 
         private void close() {

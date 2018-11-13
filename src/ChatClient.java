@@ -91,13 +91,13 @@ final class ChatClient {
 
 
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println("Server has closed the connection");
             }
         }
         try {
             sOutput.writeObject(msg);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("");
         }
     }
 
@@ -176,7 +176,7 @@ final class ChatClient {
             client.sendMessage(new ChatMessage(0,message));
             message = scanner.nextLine();
         } if(message.equalsIgnoreCase("/logout")) {
-            client.sendMessage(new ChatMessage(0,message));
+            client.sendMessage(new ChatMessage(1,message));
         }
 
     }
@@ -195,7 +195,7 @@ final class ChatClient {
                 System.out.print(msg);
                 }
             } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
+                System.out.println("Server has closed the connection");
             }
         }
     }
