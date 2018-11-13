@@ -79,6 +79,21 @@ final class ChatClient {
      * This method is used to send a ChatMessage Objects to the server
      */
     private void sendMessage(ChatMessage msg) {
+        if(msg.getMessage().equalsIgnoreCase("/logout")) {
+            try {
+                sOutput.writeObject(msg);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {sInput.close();
+            sOutput.close();
+            socket.close();
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         try {
             sOutput.writeObject(msg);
         } catch (IOException e) {
