@@ -173,8 +173,10 @@ final class ChatClient {
         client.sendMessage(new ChatMessage(0,""));
         String message = scanner.nextLine();
         while (!message.equalsIgnoreCase(" ") && !message.equalsIgnoreCase("/logout")) {
-            client.sendMessage(new ChatMessage(1,message));
+            client.sendMessage(new ChatMessage(0,message));
             message = scanner.nextLine();
+        } if(message.equalsIgnoreCase("/logout")) {
+            client.sendMessage(new ChatMessage(0,message));
         }
 
     }
