@@ -127,10 +127,15 @@ final class ChatServer {
         public void run() {
             // Read the username sent to you by client
 
-            System.out.println(username + " has connected." );
+            System.out.println(username + " has connected.");
             while(true) {
                 try {
                     cm = (ChatMessage) sInput.readObject();
+                    if (cm.getMessageType() == 1) {
+                        System.out.println(username + " has disconnected\n");
+                        remove(uniqueId);
+                        close();
+                    }
                     broadcast(" " + username + ": " + cm.getMessage() + "\n");
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
