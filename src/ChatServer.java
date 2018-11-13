@@ -132,9 +132,10 @@ final class ChatServer {
                 try {
                     cm = (ChatMessage) sInput.readObject();
                     if (cm.getMessageType() == 1) {
-                        System.out.println(username + " has disconnected\n");
+                        System.out.println(username + " disconnected with a LOGOUT message\n");
                         remove(uniqueId);
                         close();
+                        break;
                     }
                     broadcast(" " + username + ": " + cm.getMessage() + "\n");
                 } catch (IOException | ClassNotFoundException e) {
