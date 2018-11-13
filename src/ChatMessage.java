@@ -41,33 +41,5 @@ final class ChatMessage implements Serializable {
         return message;
     }
 
-    private synchronized void broadcast(String message) {
 
-
-
-    }
-
-    private boolean writeMessage(String msg) {
-        message = msg;
-
-
-        return true;
-    }
-
-    private void remove(int id) {
-
-    }
-
-    private void run() {
-        if (getMessageType() == 1) {
-            //logout
-
-        } else {
-
-        }
-    }
-
-    private void close() {
-
-    }
 }

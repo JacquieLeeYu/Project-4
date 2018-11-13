@@ -144,5 +144,25 @@ final class ChatServer {
                 }*/
             }
         }
+
+        private synchronized void broadcast(String message) {
+
+
+
+        }
+
+        private boolean writeMessage(String msg) {
+
+
+            return true;
+        }
+
+        private void remove(int id) {
+
+        }
+
+        private void close() {
+
+        }
     }
 }
