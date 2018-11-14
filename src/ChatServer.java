@@ -128,6 +128,7 @@ final class ChatServer {
             // Read the username sent to you by client
 
             System.out.println(username + " has connected.");
+            int first = 0;
             while(true) {
                 try {
                     cm = (ChatMessage) sInput.readObject();
@@ -136,11 +137,18 @@ final class ChatServer {
                         remove(uniqueId);
                         close();
                         return;
+                    } else if (cm.getMessageType() == 2) {
+//                        System.out.println("Received message type 2");
+                        directMessage(" " + username + " -> " + cm.getRecipient() +
+                                        ": "+ cm.getMessage() + "\n", cm.getRecipient());
+                    } else if (cm.getMessageType() == 3) {
+
+                    } else {
+                        if (first != 0) {
+                            broadcast(" " + username + ": " + cm.getMessage() + "\n");
+                        }
                     }
-                    if (cm.getMessageType() == 2) {
-                        directMessage(cm.getMessage(), cm.getRecipient());
-                    }
-                    broadcast(" " + username + ": " + cm.getMessage() + "\n");
+                    first = 1;
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -155,29 +163,43 @@ final class ChatServer {
 
         public synchronized void list() { //List command - lists out current users
             for (ClientThread ct : clients) {
-
+                ct.writeMessage(ct.username);
             }
         }
 
         public synchronized void directMessage(String message, String username) {
+            boolean sent = false;
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
             String messageComplete = dtf.format(java.time.LocalTime.now()) + message;
-            System.out.println(messageComplete + "234 test");
+            System.out.println(messageComplete);
             for (ClientThread ct : clients) {
+//                System.out.println(ct.username);
                 if (ct.username.equals(username)) {
+//                    System.out.println("Found user");
                     if (ct.writeMessage(message)) { //This should send the message to the correct recipient
+                        writeMessage(message);
                     //Should check if this really works tho************************************************************
-                    } else System.out.println("Server is not connected to client | " + ct.username +
-                            "\nMessage: " + ct.cm.getMessage() +
-                            "\nSent from: " + this.username + "\n(might not be right)");
+//                        System.out.println("printing to client");
+                        sent = true;
+                        break;
+                    } else {
+                        System.out.println("Server is not connected to client | " + ct.username +
+                                "\nMessage: " + ct.cm.getMessage() +
+                                "\nSent from: " + this.username + "\n(might not be right)");
+                        sent = true;
+                        break;
+                    }
                 }
+            }
+            if (!sent) {
+                System.out.println("No user: " + username + "\nin database");
             }
         }
 
         private synchronized void broadcast(String message) {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
             String messageComplete = dtf.format(java.time.LocalTime.now()) + message;
-            System.out.println(messageComplete + "234 test");
+            System.out.println(messageComplete);
             for (ClientThread ct : clients) { //using writeMessage to output to all clients
                 if (ct.writeMessage(message)) {
 
