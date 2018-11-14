@@ -23,18 +23,20 @@ final class ChatServer {
     private static int uniqueId = -1;
     private final List<ClientThread> clients = new ArrayList<>();
     private final int port;
+    private String badWords;
 
 
-    private ChatServer(int port) {
+    private ChatServer(int port, String badWords){
         this.port = port;
+        this.badWords = badWords;
+    }
+    private ChatServer(int port) {
+        this(port,"");
     }
     private ChatServer() {
         this(1500);
     }
-    private ChatServer(int port, File badWords){
-        this.port = port;
 
-    }
 
     /*
      * This is what starts the ChatServer.
@@ -61,8 +63,9 @@ final class ChatServer {
      *  If the port number is not specified 1500 is used
      */
     public static void main(String[] args) {
-        args = new String[1];
+        args = new String[2];
         String portNumber;
+        String badWord;
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
@@ -77,17 +80,23 @@ final class ChatServer {
 
             if (spaceIndex.size() == 2) {
                 portNumber = command.substring(Integer.parseInt(spaceIndex.get(1)) + 1);
+                badWord = "";
                 break;
-            } else {
+            } else if (spaceIndex.size() == 3) {
+                portNumber = command.substring(Integer.parseInt(spaceIndex.get(1)) + 1,
+                        Integer.parseInt(spaceIndex.get(2)));
+                badWord = command.substring(Integer.parseInt(spaceIndex.get(2)) + 1);
+                break;
+            }  else {
                 portNumber = "1500";
+                badWord = "";
                 break;
             }
-
         }
-
         args[0] = portNumber;
+        args[1] = badWord;
 
-        ChatServer server = new ChatServer(Integer.parseInt(args[0]));
+        ChatServer server = new ChatServer(Integer.parseInt(args[0]), args[1]);
         server.start();
     }
 
@@ -194,6 +203,8 @@ final class ChatServer {
         private synchronized void broadcast(String message) {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
             String messageComplete = dtf.format(java.time.LocalTime.now()) + message;
+            ChatFilter cf = new ChatFilter(badWords);
+            messageComplete = cf.filter(messageComplete);
             System.out.println(messageComplete);
             for (ClientThread ct : clients) { //using writeMessage to output to all clients
                 if (ct.writeMessage(message)) {
@@ -204,6 +215,8 @@ final class ChatServer {
         }
 
         private boolean writeMessage(String msg) {
+            ChatFilter cf = new ChatFilter(badWords);
+            msg = cf.filter(msg);
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
             String messageComplete = dtf.format(java.time.LocalTime.now()) + msg;
             try {

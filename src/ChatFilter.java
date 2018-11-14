@@ -39,13 +39,11 @@ public class ChatFilter {
                 for (int i = 0; i <badWords.length ; i++) {
                     msg = msg.replaceAll("(?i)" + badWords[i] , filteredWords[i]);
                 }
-                System.out.println(msg);
 
 
 
             } catch (FileNotFoundException e) {
-                System.out.println("File Not Found");
-                return null;
+
 
             } catch (IOException e) {
                 System.out.println("IOException");
