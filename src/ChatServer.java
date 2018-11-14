@@ -150,6 +150,9 @@ final class ChatServer {
             }
         }
 
+        public synchronized void directMessage(String message, String username) {
+            
+        }
 
         private synchronized void broadcast(String message) {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");

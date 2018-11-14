@@ -14,6 +14,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 final class ChatClient {
@@ -170,11 +172,24 @@ final class ChatClient {
         client.start();
 
         // Send an empty message to the server
-        client.sendMessage(new ChatMessage(0,""));
+        client.sendMessage(new ChatMessage(0,"")); //what is this? *********************************************
         String message = scanner.nextLine();
+
+        if (message.charAt(0) == '/') { //Scans for if message is for direct message
+            if (message.length() != 7) {
+                List<String> words = Arrays.asList(message.split(" "));
+                int index = 4 + words.get(1).length() + 2;
+                String fullMessage = message.substring(index);
+                if (words.get(0).equals("/msg")) {
+                    client.sendMessage(new ChatMessage(2,fullMessage, words.get(1)));
+                }
+            }
+            System.out.println("Incorrect commmand");
+        }
+
         while (!message.equalsIgnoreCase(" ") && !message.equalsIgnoreCase("/logout")) {
             client.sendMessage(new ChatMessage(0,message));
-            message = scanner.nextLine();
+            message = scanner.nextLine(); //what's this for? *************************************************************
         } if(message.equalsIgnoreCase("/logout")) {
             client.sendMessage(new ChatMessage(1,message));
         }
