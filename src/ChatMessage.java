@@ -23,7 +23,7 @@ final class ChatMessage implements Serializable {
     private String message;
     private String recipient;
 
-    //messageType {(0 = normal), (1 = logout), (2 = directMessage)}
+    //messageType {(0 = normal), (1 = logout), (2 = directMessage), (3 = /list command)}
     public ChatMessage(int messageType, String message, String recipient) {
         this.message = message;
         this.messageType = messageType;
@@ -31,7 +31,15 @@ final class ChatMessage implements Serializable {
     }
 
     public ChatMessage(int messageType, String message) {
-        this(messageType, message, "1"); //Using "1" to represent a public message since users can't have #
+        this(messageType, message, null); //Using null to represent a public message
+    }
+
+    public ChatMessage(int messageType) {
+        this(messageType, null, null); //Using null (might be a problem later)******************************
+    }
+
+    public String getRecipient() {
+        return recipient;
     }
 
     public static long getSerialVersionUID() {

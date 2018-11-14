@@ -137,6 +137,9 @@ final class ChatServer {
                         close();
                         return;
                     }
+                    if (cm.getMessageType() == 2) {
+                        directMessage(cm.getMessage(), cm.getRecipient());
+                    }
                     broadcast(" " + username + ": " + cm.getMessage() + "\n");
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
@@ -150,8 +153,25 @@ final class ChatServer {
             }
         }
 
+        public synchronized void list() { //List command - lists out current users
+            for (ClientThread ct : clients) {
+
+            }
+        }
+
         public synchronized void directMessage(String message, String username) {
-            
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
+            String messageComplete = dtf.format(java.time.LocalTime.now()) + message;
+            System.out.println(messageComplete + "234 test");
+            for (ClientThread ct : clients) {
+                if (ct.username.equals(username)) {
+                    if (ct.writeMessage(message)) { //This should send the message to the correct recipient
+                    //Should check if this really works tho************************************************************
+                    } else System.out.println("Server is not connected to client | " + ct.username +
+                            "\nMessage: " + ct.cm.getMessage() +
+                            "\nSent from: " + this.username + "\n(might not be right)");
+                }
+            }
         }
 
         private synchronized void broadcast(String message) {

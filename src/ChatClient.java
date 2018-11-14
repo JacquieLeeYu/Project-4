@@ -176,13 +176,16 @@ final class ChatClient {
         String message = scanner.nextLine();
 
         if (message.charAt(0) == '/') { //Scans for if message is for direct message
-            if (message.length() != 7) {
-                List<String> words = Arrays.asList(message.split(" "));
+            List<String> words = Arrays.asList(message.split(" "));
+            if (words.size() > 1) {
                 int index = 4 + words.get(1).length() + 2;
                 String fullMessage = message.substring(index);
-                if (words.get(0).equals("/msg")) {
+                if (words.get(0).equals("/msg") && !words.get(1).equals(username)) { //checks if first word is
+                                                                            //"/msg" and username is not the user
                     client.sendMessage(new ChatMessage(2,fullMessage, words.get(1)));
                 }
+            } else if (words.get(0).equals("/list")) {
+                client.sendMessage(new ChatMessage(3));
             }
             System.out.println("Incorrect commmand");
         }
