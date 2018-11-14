@@ -138,11 +138,10 @@ final class ChatServer {
                         close();
                         return;
                     } else if (cm.getMessageType() == 2) {
-//                        System.out.println("Received message type 2");
                         directMessage(" " + username + " -> " + cm.getRecipient() +
                                         ": "+ cm.getMessage() + "\n", cm.getRecipient());
                     } else if (cm.getMessageType() == 3) {
-
+                        list();
                     } else {
                         if (first != 0) {
                             broadcast(" " + username + ": " + cm.getMessage() + "\n");
@@ -173,13 +172,9 @@ final class ChatServer {
             String messageComplete = dtf.format(java.time.LocalTime.now()) + message;
             System.out.println(messageComplete);
             for (ClientThread ct : clients) {
-//                System.out.println(ct.username);
                 if (ct.username.equals(username)) {
-//                    System.out.println("Found user");
                     if (ct.writeMessage(message)) { //This should send the message to the correct recipient
                         writeMessage(message);
-                    //Should check if this really works tho************************************************************
-//                        System.out.println("printing to client");
                         sent = true;
                         break;
                     } else {

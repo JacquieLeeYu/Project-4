@@ -178,19 +178,13 @@ final class ChatClient {
 
         while (!message.equalsIgnoreCase(" ") && !message.equalsIgnoreCase("/logout")) {
             if (message.charAt(0) == '/') { //Scans for if message is a command
-//                System.out.println("command worked");
                 List<String> words = Arrays.asList(message.split(" "));
                 if (words.size() > 1) {
-//                    System.out.println("Second gate");
                     int index = 4 + words.get(1).length() + 2;
                     String fullMessage = message.substring(index);
-                    if (words.get(0).equalsIgnoreCase("/msg") && !words.get(1).equals(username)) { //checks if
-                        // first word is
-                        //"/msg" and username is not the user
-//                        System.out.println("Third gate");
-//                        System.out.println(fullMessage);
-//                        System.out.println(words.get(0));
-//                        System.out.println(words.get(1));
+                    if (words.get(0).equalsIgnoreCase("/msg") && !words.get(1).equals(username)) {
+                                                                                // checks if first word is
+                                                                                //"/msg" and username is not the user
                         client.sendMessage(new ChatMessage(2,fullMessage, words.get(1)));
                     }
                 } else if (words.get(0).equalsIgnoreCase("/list")) {
@@ -199,7 +193,6 @@ final class ChatClient {
                     System.out.println("Incorrect command");
                 }
             } else {
-//                System.out.println("Sending normal message");
                 client.sendMessage(new ChatMessage(0,message));
             }
             message = scanner.nextLine();
