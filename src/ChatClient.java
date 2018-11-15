@@ -12,6 +12,7 @@
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,16 +50,20 @@ final class ChatClient {
         // Create a socket
         try {
             socket = new Socket(server, port);
+        } catch (ConnectException e) {
+            System.out.println("Connection Failed. Ensure that the server has been started before attempting to connect.");
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         // Create your input and output streams
         try {
             sInput = new ObjectInputStream(socket.getInputStream());
             sOutput = new ObjectOutputStream(socket.getOutputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (NullPointerException e) {
+            System.out.println("");
+        }
+        catch (IOException e) {
+            System.out.println();
         }
 
         // This thread will listen from the server for incoming messages
@@ -69,10 +74,12 @@ final class ChatClient {
         // After starting, send the clients username to the server.
         try {
             sOutput.writeObject(username);
+        } catch (NullPointerException e) {
+            System.out.print("");
         } catch (IOException e) {
-            e.printStackTrace();
-        }
+            System.out.print("");
 
+        }
         return true;
     }
 
@@ -102,8 +109,10 @@ final class ChatClient {
         } else {
             try {
                 sOutput.writeObject(msg);
-            } catch (IOException e) {
-                System.out.println("");
+            } catch (NullPointerException e) {
+                System.out.print("");
+            } catch (IOException e ){
+                System.out.print("");
             }
         }
     }
@@ -220,7 +229,9 @@ final class ChatClient {
                 String msg = (String) sInput.readObject();
                 System.out.print(msg);
                 }
-            } catch (IOException | ClassNotFoundException e) {
+            } catch (NullPointerException e) {
+                System.out.println("Unable to connect to server");
+            }catch (IOException | ClassNotFoundException e) {
                 System.out.println("Server has closed the connection");
             }
         }
