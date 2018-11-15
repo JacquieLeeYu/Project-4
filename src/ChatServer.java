@@ -45,12 +45,23 @@ final class ChatServer {
     private void start() {
         try {
             ServerSocket serverSocket = new ServerSocket(port);
-            while(true) {
+            if(badWords != ""){
+                System.out.println("Banned Words File: " + badWords);
+                System.out.println("Banned Words:");
+                ChatFilter cf = new ChatFilter(badWords);
+                cf.listWords(badWords);
+            } else {
+                System.out.println("No Banned Words.");
+
+            }            while(true) {
+
                 Socket socket = serverSocket.accept();
                 Runnable r = new ClientThread(socket, uniqueId++);
                 Thread t = new Thread(r);
                 clients.add((ClientThread) r);
                 t.start();
+
+
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -98,6 +109,8 @@ final class ChatServer {
 
         ChatServer server = new ChatServer(Integer.parseInt(args[0]), args[1]);
         server.start();
+        System.out.println("Main");
+
     }
 
 

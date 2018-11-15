@@ -230,7 +230,7 @@ final class ChatClient {
                 System.out.print(msg);
                 }
             } catch (NullPointerException e) {
-                System.out.println("Unable to connect to server");
+                System.out.println("Unable to connect to server.\nPlease close the client and try again");
             }catch (IOException | ClassNotFoundException e) {
                 System.out.println("Server has closed the connection");
             }
