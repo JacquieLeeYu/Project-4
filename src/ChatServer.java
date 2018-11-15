@@ -52,16 +52,15 @@ final class ChatServer {
                 cf.listWords(badWords);
             } else {
                 System.out.println("No Banned Words.");
-
-            }            while(true) {
-
+            }
+            System.out.println();
+            System.out.println("Server waiting for Clients on port " + port);
+            while (true) {
                 Socket socket = serverSocket.accept();
                 Runnable r = new ClientThread(socket, uniqueId++);
                 Thread t = new Thread(r);
                 clients.add((ClientThread) r);
                 t.start();
-
-
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -109,7 +108,7 @@ final class ChatServer {
 
         ChatServer server = new ChatServer(Integer.parseInt(args[0]), args[1]);
         server.start();
-        System.out.println("Main");
+//        System.out.println("Main");
 
     }
 
@@ -150,6 +149,11 @@ final class ChatServer {
             // Read the username sent to you by client
 
             System.out.println(username + " has connected.");
+            try {
+                sOutput.writeObject("Connection accepted " + port + "\n");
+            } catch (IOException e) {
+                System.out.println("Server is not connected to client");
+            }
             int first = 0;
             while(true) {
                 try {
@@ -166,7 +170,9 @@ final class ChatServer {
                         list();
                     } else {
                         if (first != 0) {
-                            broadcast(" " + username + ": " + cm.getMessage() + "\n");
+                            broadcast(" " + username + ": " + cm.getMessage());
+                        } else {
+                            System.out.println("Server waiting for Clients on port " + port);
                         }
                     }
                     first = 1;
@@ -177,12 +183,13 @@ final class ChatServer {
         }
 
         public synchronized void list() { //List command - lists out current users
-            System.out.println("Reached list method");
+            int once = 0;
             for (ClientThread ct : clients) {
-                if (ct != null) {
+                if (ct != null && !ct.username.equals(username)) {
                     if (this.socket.isConnected()) {
                         try {
                             sOutput.writeObject(ct.username + "\n");
+                            once += 1;
                         } catch (IOException e) {
                             System.out.println("Server is not connected to client");
                         }
@@ -191,6 +198,15 @@ final class ChatServer {
                         System.out.println("Error: Could not print list of users");
                     }
                 }
+            }
+            try {
+                if (once == 0) {
+                    sOutput.writeObject("There are no other users connected to the server\n");
+                } else {
+                    sOutput.writeObject("Current total number of users: " + once + "\n");
+                }
+            } catch (IOException e) {
+                System.out.println("Server is not connected to client");
             }
         }
 
@@ -201,8 +217,8 @@ final class ChatServer {
             System.out.println(messageComplete);
             for (ClientThread ct : clients) {
                 if (ct.username.equals(username)) {
-                    if (ct.writeMessage(message)) { //This should send the message to the correct recipient
-                        writeMessage(message);
+                    if (ct.writeMessage(message + "\n")) { //This should send the message to the correct recipient
+                        writeMessage(message + "\n");
                         sent = true;
                         break;
                     } else {
@@ -226,7 +242,7 @@ final class ChatServer {
             messageComplete = cf.filter(messageComplete);
             System.out.println(messageComplete);
             for (ClientThread ct : clients) { //using writeMessage to output to all clients
-                if (ct.writeMessage(message)) {
+                if (ct.writeMessage(message + "\n")) {
 
                 } else System.out.println("Server is not connected to client | " + ct.username +
                         "\nMessage: " + ct.cm.getMessage());

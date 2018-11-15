@@ -204,7 +204,7 @@ final class ChatClient {
                 } else if (words.get(0).equalsIgnoreCase("/list")) {
                     client.sendMessage(new ChatMessage(3));
                 } else {
-                    System.out.println("Incorrect command");
+                    System.out.println("Unknown command: Try again");
                 }
             } else {
                 client.sendMessage(new ChatMessage(0,message));
