@@ -160,18 +160,24 @@ final class ChatServer {
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
-            // Send message back to the client
-               /* try {
-                    sOutput.writeObject("Pong");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }*/
             }
         }
 
         public synchronized void list() { //List command - lists out current users
+            System.out.println("Reached list method");
             for (ClientThread ct : clients) {
-                ct.writeMessage(ct.username);
+                if (ct != null) {
+                    if (this.socket.isConnected()) {
+                        try {
+                            sOutput.writeObject(ct.username + "\n");
+                        } catch (IOException e) {
+                            System.out.println("Server is not connected to client");
+                        }
+
+                    } else {
+                        System.out.println("Error: Could not print list of users");
+                    }
+                }
             }
         }
 

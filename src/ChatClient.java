@@ -81,7 +81,13 @@ final class ChatClient {
      * This method is used to send a ChatMessage Objects to the server
      */
     private void sendMessage(ChatMessage msg) {
-        if(msg.getMessage().equalsIgnoreCase("/logout")) {
+        if (msg.getMessage() == null) {
+            try {
+                sOutput.writeObject(msg);
+            } catch (IOException e) {
+                System.out.println("Oops! Your /list didn't work");
+            }
+        } else if(msg.getMessage().equalsIgnoreCase("/logout")) {
             try {
                 sOutput.writeObject(msg);
             } catch (IOException e) {
@@ -90,16 +96,15 @@ final class ChatClient {
             try { sInput.close();
             sOutput.close();
             socket.close();
-
-
             } catch (IOException e) {
                 System.out.println("Server has closed the connection");
             }
-        }
-        try {
-            sOutput.writeObject(msg);
-        } catch (IOException e) {
-            System.out.println("");
+        } else {
+            try {
+                sOutput.writeObject(msg);
+            } catch (IOException e) {
+                System.out.println("");
+            }
         }
     }
 
