@@ -159,13 +159,13 @@ final class ChatServer {
                 try {
                     cm = (ChatMessage) sInput.readObject();
                     if (cm.getMessageType() == 1) {
-                        System.out.println(username + " disconnected with a LOGOUT message\n");
+                        System.out.println(username + " disconnected with a LOGOUT message");
                         remove(uniqueId);
                         close();
                         return;
                     } else if (cm.getMessageType() == 2) {
                         directMessage(" " + username + " -> " + cm.getRecipient() +
-                                        ": "+ cm.getMessage() + "\n", cm.getRecipient());
+                                        ": "+ cm.getMessage(), cm.getRecipient());
                     } else if (cm.getMessageType() == 3) {
                         list();
                     } else {
@@ -203,7 +203,7 @@ final class ChatServer {
                 if (once == 0) {
                     sOutput.writeObject("There are no other users connected to the server\n");
                 } else {
-                    sOutput.writeObject("Current total number of users: " + once + "\n");
+                    sOutput.writeObject("Current total number of users: " + (once + 1) + "\n");
                 }
             } catch (IOException e) {
                 System.out.println("Server is not connected to client");
@@ -232,6 +232,11 @@ final class ChatServer {
             }
             if (!sent) {
                 System.out.println("No user: " + username + "\nin database");
+                try {
+                    sOutput.writeObject("Could not find user: " + username + "\n");
+                } catch (IOException e) {
+                    System.out.println("Not connected to server");
+                }
             }
         }
 
@@ -263,7 +268,6 @@ final class ChatServer {
         }
 
         private synchronized void remove(int id) {
-            System.out.println(id);
             clients.set(id, null); //not sure if need to add more into here
         }
 
@@ -273,7 +277,7 @@ final class ChatServer {
                 sOutput.close();
                 socket.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println("Could not close the connection with client: " + username);
             }
         }
     }

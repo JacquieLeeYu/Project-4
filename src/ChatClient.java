@@ -51,7 +51,7 @@ final class ChatClient {
         try {
             socket = new Socket(server, port);
         } catch (ConnectException e) {
-            System.out.println("Connection Failed. Ensure that the server has been started before attempting to connect.");
+            System.out.println("Connection Failed.\nThe server does not exist or is not open.");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -60,10 +60,10 @@ final class ChatClient {
             sInput = new ObjectInputStream(socket.getInputStream());
             sOutput = new ObjectOutputStream(socket.getOutputStream());
         } catch (NullPointerException e) {
-            System.out.println("");
+
         }
         catch (IOException e) {
-            System.out.println();
+
         }
 
         // This thread will listen from the server for incoming messages
@@ -230,9 +230,10 @@ final class ChatClient {
                 System.out.print(msg);
                 }
             } catch (NullPointerException e) {
-                System.out.println("Unable to connect to server.\nPlease close the client and try again");
+                System.out.println("-------\nUnable to connect to server.\nPlease close the client and try again");
             }catch (IOException | ClassNotFoundException e) {
                 System.out.println("Server has closed the connection");
+                //should we try to find a way to not have to close the client?
             }
         }
     }
