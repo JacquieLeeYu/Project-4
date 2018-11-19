@@ -191,7 +191,7 @@ final class ChatClient {
 
 
         while (!message.equalsIgnoreCase(" ") && !message.equalsIgnoreCase("/logout")) {
-            if (message.charAt(0) == '/') { //Scans for if message is a command
+            if (message.length() != 0 && message.charAt(0) == '/') { //Scans for if message is a command
                 List<String> words = Arrays.asList(message.split(" "));
                 if (words.size() > 1) {
                     int index = 4 + words.get(1).length() + 2;
