@@ -45,7 +45,7 @@ final class ChatServer {
     private void start() {
         try {
             ServerSocket serverSocket = new ServerSocket(port);
-            if(badWords != ""){
+            if(!badWords.equals("")){
                 System.out.println("Banned Words File: " + badWords);
                 System.out.println("Banned Words:");
                 ChatFilter cf = new ChatFilter(badWords);
@@ -54,10 +54,11 @@ final class ChatServer {
                 System.out.println("No Banned Words.");
             }
             System.out.println();
-            System.out.println("Server waiting for Clients on port " + port);
+            System.out.println("Server waiting for clients on port " + port);
             while (true) {
                 Socket socket = serverSocket.accept();
-                Runnable r = new ClientThread(socket, uniqueId++);
+                uniqueId++;
+                Runnable r = new ClientThread(socket, uniqueId);
                 Thread t = new Thread(r);
                 clients.add((ClientThread) r);
                 t.start();
@@ -160,8 +161,8 @@ final class ChatServer {
                     cm = (ChatMessage) sInput.readObject();
                     if (cm.getMessageType() == 1) {
                         System.out.println(username + " disconnected with a LOGOUT message");
-                        remove(uniqueId);
                         close();
+                        remove(this.id);
                         return;
                     } else if (cm.getMessageType() == 2) {
                         directMessage(" " + username + " -> " + cm.getRecipient() +
@@ -268,7 +269,15 @@ final class ChatServer {
         }
 
         private synchronized void remove(int id) {
-            clients.set(id, null); //not sure if need to add more into here
+            for (int i = 0 ; i < clients.size() ; i++) {
+                if (id == clients.get(i).id) {
+                    clients.remove(i);
+                    break;
+                }
+            }
+//            if (clients.size() == 0) {
+//                start();
+//            }
         }
 
         private void close() {
