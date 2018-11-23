@@ -136,11 +136,12 @@ final class ChatClient {
         args = new String[3];
         String username;
         String portNumber;
+        int testingNumber;
         String serverAddress;
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
-            String command = scanner.nextLine(); //command taken from terminal
+            String command = scanner.nextLine().trim(); //command taken from terminal
             ArrayList<String> spaceIndex = new ArrayList<>(); //Array of indexes with spaces
 
             for (int i = 0 ; i < command.length() ; i++) { //check for number of spaces
@@ -149,32 +150,47 @@ final class ChatClient {
                 }
             }
 
+            //if wrong command
+            if (spaceIndex.size() > 1) {
+                if (!command.substring(0, Integer.parseInt(spaceIndex.get(1))).equals("java ChatClient") ||
+                        spaceIndex.size() > 4) {
+                    System.out.println("Unknown command: " + command);
+                    continue;
+                }
+            }
+
 
             //THIS DOES NOT HANDLE IF THE USER INPUTS SOMETHING OTHER THAN FOR JAVA CHATCLIENT
-
-            if (spaceIndex.size() == 4) { //if contains all parameters
-                username = command.substring(Integer.parseInt(spaceIndex.get(1)) + 1,
-                        Integer.parseInt(spaceIndex.get(2)));
-                portNumber = command.substring(Integer.parseInt(spaceIndex.get(2)) + 1,
-                        Integer.parseInt(spaceIndex.get(3)));
-                serverAddress = command.substring(Integer.parseInt(spaceIndex.get(3)) + 1);
-                break;
-            } else if (spaceIndex.size() == 3) { //if no serverAddress
-                username = command.substring(Integer.parseInt(spaceIndex.get(1)) + 1,
-                        Integer.parseInt(spaceIndex.get(2)));
-                portNumber = command.substring(Integer.parseInt(spaceIndex.get(2)) + 1);
-                serverAddress = "localhost";
-                break;
-            } else if (spaceIndex.size() == 2){ //if only contains username
-                username = command.substring(Integer.parseInt(spaceIndex.get(1)) + 1);
-                portNumber = "1500";
-                serverAddress = "localhost";
-                break;
-            } else { // if it contains nothing.
-                username = "Anonymous";
-                portNumber = "1500";
-                serverAddress = "localhost";
-                break;
+            try {
+                if (spaceIndex.size() == 4) { //if contains all parameters
+                    username = command.substring(Integer.parseInt(spaceIndex.get(1)) + 1,
+                            Integer.parseInt(spaceIndex.get(2)));
+                    portNumber = command.substring(Integer.parseInt(spaceIndex.get(2)) + 1,
+                            Integer.parseInt(spaceIndex.get(3)));
+                    testingNumber = Integer.parseInt(portNumber);
+                    serverAddress = command.substring(Integer.parseInt(spaceIndex.get(3)) + 1);
+                    break;
+                } else if (spaceIndex.size() == 3) { //if no serverAddress
+                    username = command.substring(Integer.parseInt(spaceIndex.get(1)) + 1,
+                            Integer.parseInt(spaceIndex.get(2)));
+                    portNumber = command.substring(Integer.parseInt(spaceIndex.get(2)) + 1);
+                    testingNumber = Integer.parseInt(portNumber);
+                    serverAddress = "localhost";
+                    break;
+                } else if (spaceIndex.size() == 2) { //if only contains username
+                    username = command.substring(Integer.parseInt(spaceIndex.get(1)) + 1);
+                    portNumber = "1500";
+                    serverAddress = "localhost";
+                    break;
+                } else { // if it contains nothing.
+                    username = "Anonymous";
+                    portNumber = "1500";
+                    serverAddress = "localhost";
+                    break;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Wrong parameter input: " + command.substring(Integer.parseInt(spaceIndex.get(2))
+                                + 1, Integer.parseInt(spaceIndex.get(3))));
             }
         }
         args[0] = username;
