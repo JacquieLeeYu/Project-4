@@ -1,11 +1,11 @@
 /**
  * CS18000 Project 4 - Simple Server
  *
- *
+ * Sends messages to ChatServer
  *
  * @author Jacquie Yu, Siddarth Pillai
  *
- *
+ * @version November 26th, 2018
  */
 
 

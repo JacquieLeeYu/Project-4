@@ -3,11 +3,11 @@ import java.io.*;
 /**
  * CS18000 Project 4 - Simple Server
  *
- *
+ * Filters the messages
  *
  * @author Jacquie Yu, Siddarth Pillai
  *
- *
+ * @version November 26th, 2018
  */
 
 public class ChatFilter {

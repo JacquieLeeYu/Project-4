@@ -1,11 +1,11 @@
 /**
  * CS18000 Project 4 - Simple Server
  *
- *
+ * Type of message the object is when transferred between server and client
  *
  * @author Jacquie Yu, Siddarth Pillai
  *
- *
+ * @version November 26th, 2018
  */
 
 

@@ -1,11 +1,11 @@
 /**
  * CS18000 Project 4 - Simple Server
  *
- *
+ * Links information to all or specific clients
  *
  * @author Jacquie Yu, Siddarth Pillai
  *
- *
+ * @version November 26th, 2018
  */
 
 import java.io.File;
