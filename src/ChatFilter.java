@@ -5,7 +5,7 @@ import java.io.*;
  *
  * Filters the messages
  *
- * @author Jacquie Yu, Siddarth Pillai
+ * @author Jacquie Yu, Siddharth Pillai
  *
  * @version November 26th, 2018
  */
