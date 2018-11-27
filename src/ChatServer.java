@@ -3,7 +3,7 @@
  *
  * Links information to all or specific clients
  *
- * @author Jacquie Yu, Siddarth Pillai
+ * @author Jacquie Yu, Siddharth Pillai
  *
  * @version November 26th, 2018
  */
