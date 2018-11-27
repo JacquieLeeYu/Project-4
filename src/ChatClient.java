@@ -238,7 +238,12 @@ final class ChatClient {
                 List<String> words = Arrays.asList(message.split(" "));
                 if (words.size() > 1) {
                     int index = 4 + words.get(1).length() + 2;
-                    String fullMessage = message.substring(index);
+                    String fullMessage;
+                    if (index >= message.length()) {
+                        fullMessage = "";
+                    } else {
+                        fullMessage = message.substring(index);
+                    }
                     if (words.get(0).equalsIgnoreCase("/msg")) {
                                                                                 // checks if first word is
                                                                                 //"/msg" and username is not the user
