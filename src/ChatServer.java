@@ -236,19 +236,32 @@ final class ChatServer {
             boolean sent = false;
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
             String messageComplete = dtf.format(java.time.LocalTime.now()) + message;
+            if (username.equals(this.username)) {
+                System.out.println("Client tried to direct message itself");
+                return;
+            }
             System.out.println(messageComplete);
             for (ClientThread ct : clients) {
                 if (ct.username.equals(username)) {
-                    if (ct.writeMessage(message + "\n")) { //This should send the message to the correct recipient
-                        writeMessage(message + "\n");
-                        sent = true;
-                        break;
+                    if (!ct.username.equals(this.username)) {
+                        if (ct.writeMessage(message + "\n")) { //This should send the message to the correct recipient
+                            writeMessage(message + "\n");
+                            sent = true;
+                            break;
+                        } else {
+                            System.out.println("Server is not connected to client | " + ct.username +
+                                    "\nMessage: " + ct.cm.getMessage() +
+                                    "\nSent from: " + this.username + "\n(might not be right)");
+                            sent = true;
+                            break;
+                        }
                     } else {
-                        System.out.println("Server is not connected to client | " + ct.username +
-                                "\nMessage: " + ct.cm.getMessage() +
-                                "\nSent from: " + this.username + "\n(might not be right)");
-                        sent = true;
-                        break;
+                        try {
+                            sOutput.writeObject("You cannot direct message yourself\n");
+                            sent = true;
+                        } catch (IOException e) {
+                            System.out.println("Client is not connected");
+                        }
                     }
                 }
             }

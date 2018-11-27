@@ -104,7 +104,7 @@ final class ChatClient {
                 sOutput.close();
                 socket.close();
             } catch (IOException e) {
-                System.out.println("Server has closed the connection");
+                System.out.println("");
             }
         } else if (msg.getMessage() == null) {
             try {
@@ -122,6 +122,7 @@ final class ChatClient {
                 sInput.close();
                 sOutput.close();
                 socket.close();
+                System.out.println("Server has closed the connection");
             } catch (IOException e) {
                 System.out.println("Server has closed the connection");
             }
@@ -129,9 +130,9 @@ final class ChatClient {
             try {
                 sOutput.writeObject(msg);
             } catch (NullPointerException e) {
-                System.out.print("");
+                System.out.print("Server has closed the connection");
             } catch (IOException e ){
-                System.out.print("");
+                System.out.print("Server has closed the connection");
             }
         }
     }
@@ -238,10 +239,14 @@ final class ChatClient {
                 if (words.size() > 1) {
                     int index = 4 + words.get(1).length() + 2;
                     String fullMessage = message.substring(index);
-                    if (words.get(0).equalsIgnoreCase("/msg") && !words.get(1).equals(username)) {
+                    if (words.get(0).equalsIgnoreCase("/msg")) {
                                                                                 // checks if first word is
                                                                                 //"/msg" and username is not the user
-                        client.sendMessage(new ChatMessage(2,fullMessage, words.get(1)));
+                        if (!words.get(1).equals(username)) {
+                            client.sendMessage(new ChatMessage(2, fullMessage, words.get(1)));
+                        } else {
+                            System.out.println("You cannot direct message yourself!");
+                        }
                     }
                 } else if (words.get(0).equalsIgnoreCase("/list")) {
                     client.sendMessage(new ChatMessage(3));
