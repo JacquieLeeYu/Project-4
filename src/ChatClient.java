@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Scanner;
 
 final class ChatClient {
+    private static boolean quitit;
     private ObjectInputStream sInput;
     private ObjectOutputStream sOutput;
     private Socket socket;
@@ -27,6 +28,8 @@ final class ChatClient {
     private final String server;
     private final String username;
     private final int port;
+
+
 
     private ChatClient(String username, int port, String server) {
         this.server = server;
@@ -53,7 +56,7 @@ final class ChatClient {
         } catch (ConnectException e) {
             System.out.println("Connection Failed.\nThe server does not exist or is not open.");
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Server could not connect");
         }
         // Create your input and output streams
         try {
@@ -69,7 +72,15 @@ final class ChatClient {
         // This thread will listen from the server for incoming messages
         Runnable r = new ListenFromServer();
         Thread t = new Thread(r);
+//        System.out.println("OK where is it stopping geez");
+//        System.out.println(((ListenFromServer) r).quit);
+//        if (((ListenFromServer) r).quit) {
+//            quitit = true;
+//            return false;
+//        }
+
         t.start();
+
 
         // After starting, send the clients username to the server.
         try {
@@ -88,7 +99,14 @@ final class ChatClient {
      * This method is used to send a ChatMessage Objects to the server
      */
     private void sendMessage(ChatMessage msg) {
-        if (msg.getMessage() == null) {
+        if (msg.getMessageType() == 4) {
+            try { sInput.close();
+                sOutput.close();
+                socket.close();
+            } catch (IOException e) {
+                System.out.println("Server has closed the connection");
+            }
+        } else if (msg.getMessage() == null) {
             try {
                 sOutput.writeObject(msg);
             } catch (IOException e) {
@@ -98,11 +116,12 @@ final class ChatClient {
             try {
                 sOutput.writeObject(msg);
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println("Could not send message to the server");
             }
-            try { sInput.close();
-            sOutput.close();
-            socket.close();
+            try {
+                sInput.close();
+                sOutput.close();
+                socket.close();
             } catch (IOException e) {
                 System.out.println("Server has closed the connection");
             }
@@ -203,6 +222,13 @@ final class ChatClient {
 
         // Send an empty message to the server
         client.sendMessage(new ChatMessage(0,"")); //what is this? *********************************************
+
+
+        if (quitit) { //if duplicate sighhhhhhhhhhhhhhhhhhhhhhh
+            client.sendMessage(new ChatMessage(4));
+            return;
+        }
+
         String message = scanner.nextLine();
 
 
@@ -241,14 +267,20 @@ final class ChatClient {
     private final class ListenFromServer implements Runnable {
         public void run() {
             try {
-                while(true){
-                String msg = (String) sInput.readObject();
-                System.out.print(msg);
+                while(true) {
+                    String msg = (String) sInput.readObject();
+                    if (msg.equals("/logout")) {
+                        quitit = true;
+                        System.out.println("Duplicate usernames are not allowed");
+                    } else {
+                        quitit = false;
+                        System.out.print(msg);
+                    }
                 }
             } catch (NullPointerException e) {
                 System.out.println("-------\nUnable to connect to server.\nPlease close the client and try again");
             }catch (IOException | ClassNotFoundException e) {
-                System.out.println("Server has closed the connection");
+                System.out.println();
                 //should we try to find a way to not have to close the client?
             }
         }

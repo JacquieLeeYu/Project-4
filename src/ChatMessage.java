@@ -23,7 +23,7 @@ final class ChatMessage implements Serializable {
     private String message;
     private String recipient;
 
-    //messageType {(0 = normal), (1 = logout), (2 = directMessage), (3 = /list command)}
+    //messageType {(0 = normal), (1 = logout), (2 = directMessage), (3 = /list command), (4 = dupe/quit)}
     public ChatMessage(int messageType, String message, String recipient) {
         this.message = message;
         this.messageType = messageType;

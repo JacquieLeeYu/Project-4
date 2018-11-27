@@ -60,6 +60,12 @@ final class ChatServer {
                 uniqueId++;
                 Runnable r = new ClientThread(socket, uniqueId);
                 Thread t = new Thread(r);
+                for (ClientThread cl : clients) {
+                    if (((ClientThread) r).username.equals(cl.username)) {
+                        System.out.println("Client attempted to connect with duplicate username");
+
+                    }
+                }
                 clients.add((ClientThread) r);
                 t.start();
             }
@@ -125,20 +131,22 @@ final class ChatServer {
         int id;
         String username;
         ChatMessage cm;
-
-
+        boolean dupe;
 
         private ClientThread(Socket socket, int id) {
             this.id = id;
             this.socket = socket;
-            int writeMess = 0;
             try {
                 sOutput = new ObjectOutputStream(socket.getOutputStream());
                 sInput = new ObjectInputStream(socket.getInputStream());
                 username = (String) sInput.readObject();
+                for (ClientThread cl : clients) { //Checks for a duplication in username
+                    if (cl.username.equals(username)) {
+                        dupe = true;
+                    }
+                }
             } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-                writeMess = -1;
+                System.out.println("Client could not be created");
             }
         }
 
@@ -148,6 +156,19 @@ final class ChatServer {
         @Override
         public void run() {
             // Read the username sent to you by client
+
+            if (dupe) {
+                System.out.println("Removing duplicate...");
+                try {
+                    sOutput.writeObject("/logout");
+                    close();
+                    remove(this.id);
+                } catch (IOException e) {
+                    System.out.println("Server could not connect to client");
+                }
+                System.out.println("Duplicate removed");
+                return;
+            }
 
             System.out.println(username + " has connected.");
             try {
